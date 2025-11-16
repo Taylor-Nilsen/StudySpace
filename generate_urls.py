@@ -14,13 +14,25 @@ import json
 
 def normalize_room_number(room):
     """Normalize room number by removing leading zeros and trailing spaces for comparison."""
+    import re
     # Remove trailing spaces
     room = room.strip()
-    # For alphanumeric rooms (like "A152", "CS24"), keep as is
-    # For numeric rooms (like "02444"), remove leading zeros but keep letters
-    if room and not room[0].isalpha():
-        # Remove leading zeros from the beginning
+    
+    # Handle different room number formats:
+    # Numeric only: "02444" -> "2444"
+    # Alpha prefix with numbers: "A00002" -> "A2", "CS00024" -> "CS24"
+    # Mixed: "2100A" -> "2100A" (no change needed)
+    
+    # Check if it starts with letters followed by numbers
+    match = re.match(r'^([A-Z]+)0*(\d+\w*)$', room)
+    if match:
+        # Alpha prefix case: remove leading zeros from the numeric part
+        prefix, number = match.groups()
+        return f"{prefix}{number}"
+    elif room and not room[0].isalpha():
+        # Pure numeric case: remove leading zeros
         room = room.lstrip('0') or '0'
+    
     return room
 
 def generate_urls(classroom_list, offered_rooms=None, building_name_map=None):
