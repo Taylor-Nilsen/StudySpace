@@ -7,6 +7,7 @@ A UCLA classroom availability platform that helps students find available study 
 StudySpace collects classroom schedule data from UCLA's registrar and presents it in an easy-to-use format, allowing students to:
 - **Find empty classrooms** for studying between classes
 - **Check room availability** by building or time slot
+- **Filter by amenities** - Find rooms with A/C, projectors, specific seating arrangements
 - **Plan study sessions** in comfortable, accessible spaces
 - **Avoid crowded areas** by finding lesser-known study spots
 
@@ -22,6 +23,7 @@ StudySpace collects classroom schedule data from UCLA's registrar and presents i
 
 **`scrape.py`** - High-performance schedule scraper
 - Scrapes class schedules from UCLA registrar in parallel
+- Extracts room characteristics (A/C, projectors, seating type, etc.)
 - Uses Selenium with headless Chrome browsers
 - Processes 150+ classrooms in ~10 minutes
 - Saves progress after each batch for reliability
@@ -38,6 +40,15 @@ StudySpace collects classroom schedule data from UCLA's registrar and presents i
   "capacity": 80,
   "type": "Classroom",
   "url": "https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom=...",
+  "characteristics": [
+    "Air Conditioning",
+    "Auditorium Setting",
+    "Chalkboard",
+    "Comp Projector(1024X768)-Installed",
+    "Media Equipment",
+    "Microphone-Installed",
+    "Projection Screen"
+  ],
   "schedule": {
     "Monday": [
       {
@@ -128,6 +139,7 @@ The scraper uses optimized Selenium to:
 - Wait for dynamic content (6s max initial load, 2s for AJAX)
 - Extract embedded JSON from JavaScript calendar
 - Parse course names, times, enrollment, and type
+- Extract room characteristics from HTML attributes list
 - Organize events by day of week
 
 **Performance:**
@@ -155,6 +167,7 @@ The scraper uses optimized Selenium to:
 ### Data Quality
 - Structured JSON output
 - Complete schedule information
+- Room characteristics and amenities
 - Enrollment and capacity tracking
 - Room type and capacity metadata
 
@@ -162,6 +175,7 @@ The scraper uses optimized Selenium to:
 
 Each classroom includes:
 - **Basic Info**: Building, room number, capacity, type
+- **Characteristics**: Equipment and amenities (A/C, projectors, whiteboards, etc.)
 - **Schedule**: Events organized by day of week
 - **Event Details**: Course name, type (lecture/lab), times, enrollment
 - **Availability Flags**: offered status, calendar presence
