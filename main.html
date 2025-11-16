@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCLA StudySpace Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 20px;
+            border-bottom: 3px solid #1e40af;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.95em;
+        }
+
+        .filters {
+            background: #fff;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 0.95em;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin-right: 6px;
+        }
+
+        .stats {
+            background: #f9f9f9;
+            padding: 12px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stats-item {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .results {
+            padding: 25px;
+        }
+
+        .room-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .room-card:hover {
+            border-color: #2563eb;
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .room-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .room-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: 500;
+            border: 1px solid #ddd;
+        }
+
+        .badge-building {
+            background: #e3f2fd;
+            color: #1565c0;
+            border-color: #90caf9;
+        }
+
+        .badge-capacity {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #81c784;
+        }
+
+        .badge-type {
+            background: #fff3e0;
+            color: #e65100;
+            border-color: #ffb74d;
+        }
+
+        .characteristics {
+            margin: 15px 0;
+        }
+
+        .characteristics-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .char-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .char-tag {
+            background: #f5f5f5;
+            color: #333;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            border: 1px solid #e0e0e0;
+        }
+
+        .schedule {
+            margin-top: 15px;
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-schedule {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .toggle-schedule:hover {
+            background: #1e40af;
+        }
+
+        .schedule-grid {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .schedule-grid.active {
+            display: block;
+        }
+
+        .day-schedule {
+            margin-bottom: 15px;
+        }
+
+        .day-name {
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 5px;
+            padding: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+        }
+
+        .time-slot {
+            padding: 8px 10px;
+            margin: 4px 0;
+            border-left: 3px solid #666;
+            background: #fafafa;
+            border-radius: 2px;
+            font-size: 0.9em;
+        }
+
+        .time-slot.free {
+            border-left-color: #2e7d32;
+            background: #f1f8f4;
+        }
+
+        .course-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .time-range {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .enrollment {
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+
+        .free-times {
+            margin-top: 8px;
+            padding: 8px;
+            background: #f1f8f4;
+            border-radius: 3px;
+            border: 1px solid #81c784;
+        }
+
+        .free-times-title {
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+
+        .free-time-list {
+            color: #2e7d32;
+            font-size: 0.85em;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .no-results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .clear-filters {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .clear-filters:hover {
+            background: #b91c1c;
+        }
+
+        .view-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.85em;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .room-header {
+                flex-direction: column;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+        }
+
+        .day-filter {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .day-btn {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .day-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .day-btn:hover {
+            border-color: #2563eb;
+        }
+
+        .time-picker {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .time-picker select {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 UCLA StudySpace Finder</h1>
+            <p class="subtitle">Find the perfect classroom for studying</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="buildingFilter">🏢 Building</label>
+                    <select id="buildingFilter">
+                        <option value="">All Buildings</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="capacityFilter">👥 Minimum Capacity</label>
+                    <input type="number" id="capacityFilter" placeholder="e.g., 30" min="0">
+                </div>
+
+                <div class="filter-group">
+                    <label for="roomSearch">🔍 Search Room</label>
+                    <input type="text" id="roomSearch" placeholder="e.g., BOELTER 2444">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>📅 Day of Week</label>
+                <div class="day-filter">
+                    <button class="day-btn" data-day="">All Days</button>
+                    <button class="day-btn" data-day="Monday">Mon</button>
+                    <button class="day-btn" data-day="Tuesday">Tue</button>
+                    <button class="day-btn" data-day="Wednesday">Wed</button>
+                    <button class="day-btn" data-day="Thursday">Thu</button>
+                    <button class="day-btn" data-day="Friday">Fri</button>
+                    <button class="day-btn" data-day="Saturday">Sat</button>
+                    <button class="day-btn" data-day="Sunday">Sun</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>🕐 Show rooms free between:</label>
+                <div class="time-picker">
+                    <select id="startTime">
+                        <option value="">Any time</option>
+                    </select>
+                    <span>to</span>
+                    <select id="endTime">
+                        <option value="">Any time</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>✨ Characteristics</label>
+                <div class="checkbox-group" id="characteristicsFilter">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <button class="clear-filters" onclick="clearFilters()">Clear All Filters</button>
+        </div>
+
+        <div class="stats">
+            <div class="stats-item">
+                <span id="totalRooms">0</span> rooms found
+            </div>
+            <div class="stats-item">
+                <span id="availableRooms">0</span> currently available
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <!-- Results will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        let classroomsData = [];
+        let allCharacteristics = new Set();
+        let selectedDay = '';
+        let selectedCharacteristics = new Set();
+        let dataLoaded = false;
+
+        // Time slots for filtering (24-hour format)
+        const timeSlots = [
+            '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+            '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
+            '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
+        ];
+
+        // Initialize basic event listeners on DOM load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners for filters that exist in HTML
+            document.getElementById('buildingFilter').addEventListener('change', handleFilterChange);
+            document.getElementById('capacityFilter').addEventListener('input', handleFilterChange);
+            document.getElementById('roomSearch').addEventListener('input', handleFilterChange);
+            document.getElementById('startTime').addEventListener('change', handleFilterChange);
+            document.getElementById('endTime').addEventListener('change', handleFilterChange);
+
+            // Day filter buttons
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedDay = this.dataset.day;
+                    handleFilterChange();
+                });
+            });
+
+            // Set default day to All Days
+            document.querySelector('.day-btn[data-day=""]').classList.add('active');
+
+            // Load JSON data
+            loadData();
+        });
+
+        function handleFilterChange() {
+            if (dataLoaded) {
+                renderResults();
+            }
+        }
+
+        function loadData() {
+            document.getElementById('results').innerHTML = '<div style="padding: 40px; text-align: center;">Loading classroom data...</div>';
+            
+            fetch('classrooms.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load classrooms.json');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    classroomsData = data.filter(room => room.offered);
+                    dataLoaded = true;
+                    initializeFilters();
+                    renderResults();
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    document.getElementById('results').innerHTML = 
+                        '<div class="no-results"><div class="no-results-icon">⚠️</div><h2>Error loading classroom data</h2><p>' + error.message + '</p></div>';
+                });
+        }
+
+        function initializeFilters() {
+            // Populate building filter
+            const buildings = [...new Set(classroomsData.map(room => room.building))].sort();
+            const buildingFilter = document.getElementById('buildingFilter');
+            buildingFilter.innerHTML = '<option value="">All Buildings</option>';
+            buildings.forEach(building => {
+                const option = document.createElement('option');
+                option.value = building;
+                option.textContent = building;
+                buildingFilter.appendChild(option);
+            });
+
+            // Collect all characteristics
+            classroomsData.forEach(room => {
+                if (room.characteristics) {
+                    room.characteristics.forEach(char => allCharacteristics.add(char));
+                }
+            });
+
+            // Populate characteristics filter
+            const charFilter = document.getElementById('characteristicsFilter');
+            [...allCharacteristics].sort().forEach(char => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-item';
+                div.innerHTML = `
+                    <input type="checkbox" id="char-${char.replace(/\s+/g, '-')}" value="${char}">
+                    <label for="char-${char.replace(/\s+/g, '-')}">${char}</label>
+                `;
+                charFilter.appendChild(div);
+            });
+
+            // Populate time filters
+            const startTime = document.getElementById('startTime');
+            const endTime = document.getElementById('endTime');
+            timeSlots.forEach(time => {
+                startTime.innerHTML += `<option value="${time}">${time}</option>`;
+                endTime.innerHTML += `<option value="${time}">${time}</option>`;
+            });
+
+            // Add event listeners for dynamically created characteristics checkboxes
+            document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        selectedCharacteristics.add(this.value);
+                    } else {
+                        selectedCharacteristics.delete(this.value);
+                    }
+                    handleFilterChange();
+                });
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('buildingFilter').value = '';
+            document.getElementById('capacityFilter').value = '';
+            document.getElementById('roomSearch').value = '';
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
+            selectedDay = '';
+            selectedCharacteristics.clear();
+            
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.day-btn[data-day=""]').classList.add('active');
+            
+            document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            renderResults();
+        }
+
+        function timeToMinutes(timeStr) {
+            const [time, period] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            if (period === 'PM' && hours !== 12) hours += 12;
+            if (period === 'AM' && hours === 12) hours = 0;
+            return hours * 60 + minutes;
+        }
+
+        function isRoomFreeAtTime(room, day, startTime, endTime) {
+            if (!room.schedule || !room.schedule[day]) return true;
+            
+            const requestedStart = timeToMinutes(startTime);
+            const requestedEnd = timeToMinutes(endTime);
+            
+            const daySchedule = room.schedule[day];
+            
+            for (let slot of daySchedule) {
+                const slotStart = timeToMinutes(slot.start_time);
+                const slotEnd = timeToMinutes(slot.end_time);
+                
+                // Check if there's any overlap
+                if (!(requestedEnd <= slotStart || requestedStart >= slotEnd)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function getFreeTimes(room, day) {
+            if (!room.schedule || !room.schedule[day] || room.schedule[day].length === 0) {
+                return ['All day'];
+            }
+
+            const schedule = room.schedule[day].sort((a, b) => 
+                timeToMinutes(a.start_time) - timeToMinutes(b.start_time)
+            );
+
+            const freeTimes = [];
+            const dayStart = timeToMinutes('08:00 AM');
+            const dayEnd = timeToMinutes('10:00 PM');
+
+            // Check before first class
+            if (schedule.length > 0) {
+                const firstClassStart = timeToMinutes(schedule[0].start_time);
+                if (firstClassStart > dayStart) {
+                    freeTimes.push(`08:00 AM - ${schedule[0].start_time}`);
+                }
+            }
+
+            // Check between classes
+            for (let i = 0; i < schedule.length - 1; i++) {
+                const currentEnd = timeToMinutes(schedule[i].end_time);
+                const nextStart = timeToMinutes(schedule[i + 1].start_time);
+                
+                if (nextStart > currentEnd) {
+                    freeTimes.push(`${schedule[i].end_time} - ${schedule[i + 1].start_time}`);
+                }
+            }
+
+            // Check after last class
+            if (schedule.length > 0) {
+                const lastClassEnd = timeToMinutes(schedule[schedule.length - 1].end_time);
+                if (lastClassEnd < dayEnd) {
+                    freeTimes.push(`${schedule[schedule.length - 1].end_time} - 10:00 PM`);
+                }
+            }
+
+            return freeTimes.length > 0 ? freeTimes : ['No free time'];
+        }
+
+        function renderResults() {
+            const buildingFilter = document.getElementById('buildingFilter').value;
+            const capacityFilter = parseInt(document.getElementById('capacityFilter').value) || 0;
+            const roomSearch = document.getElementById('roomSearch').value.toLowerCase();
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            let filtered = classroomsData.filter(room => {
+                // Building filter
+                if (buildingFilter && room.building !== buildingFilter) return false;
+
+                // Capacity filter
+                if (capacityFilter && (!room.capacity || room.capacity < capacityFilter)) return false;
+
+                // Room search
+                if (roomSearch && !room.text.toLowerCase().includes(roomSearch)) return false;
+
+                // Characteristics filter
+                if (selectedCharacteristics.size > 0) {
+                    if (!room.characteristics) return false;
+                    for (let char of selectedCharacteristics) {
+                        if (!room.characteristics.includes(char)) return false;
+                    }
+                }
+
+                // Time filter
+                if (startTime && endTime) {
+                    if (selectedDay) {
+                        if (!isRoomFreeAtTime(room, selectedDay, startTime, endTime)) return false;
+                    } else {
+                        // Check if free at this time on any day
+                        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                        const freeOnAnyDay = days.some(day => isRoomFreeAtTime(room, day, startTime, endTime));
+                        if (!freeOnAnyDay) return false;
+                    }
+                }
+
+                return true;
+            });
+
+            document.getElementById('totalRooms').textContent = filtered.length;
+            
+            // Calculate currently available (no class right now)
+            const now = new Date();
+            const currentDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
+            const currentTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            
+            const resultsDiv = document.getElementById('results');
+            
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h2>No rooms found</h2>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsDiv.innerHTML = filtered.map(room => {
+                const daysToShow = selectedDay ? [selectedDay] : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                
+                return `
+                    <div class="room-card">
+                        <div class="room-header">
+                            <div>
+                                <div class="room-title">${room.text}</div>
+                                <div class="room-info">
+                                    <span class="badge badge-building">${room.building}</span>
+                                    ${room.capacity ? `<span class="badge badge-capacity">Capacity: ${room.capacity}</span>` : ''}
+                                    ${room.type ? `<span class="badge badge-type">${room.type}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        ${room.characteristics && room.characteristics.length > 0 ? `
+                            <div class="characteristics">
+                                <div class="characteristics-title">Available Features:</div>
+                                <div class="char-tags">
+                                    ${room.characteristics.map(char => `<span class="char-tag">${char}</span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${room.schedule ? `
+                            <div class="schedule">
+                                <div class="schedule-title">
+                                    <span>📅 Schedule</span>
+                                    <button class="toggle-schedule" onclick="toggleSchedule(this)">Show Schedule</button>
+                                </div>
+                                <div class="schedule-grid">
+                                    ${daysToShow.map(day => {
+                                        const daySchedule = room.schedule[day] || [];
+                                        const freeTimes = getFreeTimes(room, day);
+                                        
+                                        return `
+                                            <div class="day-schedule">
+                                                <div class="day-name">${day}</div>
+                                                ${daySchedule.length === 0 ? 
+                                                    '<div class="time-slot free">🎉 Free all day!</div>' :
+                                                    daySchedule.map(slot => `
+                                                        <div class="time-slot">
+                                                            <div class="course-name">${slot.course} - ${slot.type}</div>
+                                                            <div class="time-range">⏰ ${slot.start_time} - ${slot.end_time}</div>
+                                                            <div class="enrollment">👥 ${slot.enrolled}/${slot.capacity} enrolled</div>
+                                                        </div>
+                                                    `).join('')
+                                                }
+                                                ${freeTimes[0] !== 'No free time' ? `
+                                                    <div class="free-times">
+                                                        <div class="free-times-title">✨ Free Times:</div>
+                                                        <div class="free-time-list">${freeTimes.join(' • ')}</div>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : '<div class="schedule">No schedule information available</div>'}
+
+                        <a href="${room.url}" target="_blank" class="view-link">View on UCLA Schedule →</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleSchedule(button) {
+            const scheduleGrid = button.closest('.schedule').querySelector('.schedule-grid');
+            scheduleGrid.classList.toggle('active');
+            button.textContent = scheduleGrid.classList.contains('active') ? 'Hide Schedule' : 'Show Schedule';
+        }
+    </script>
+</body>
+</html>
