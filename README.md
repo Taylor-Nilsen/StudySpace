@@ -3,13 +3,18 @@
 A UCLA classroom availability platform that helps students find available study spaces across campus by scraping and analyzing classroom schedules.
 
 ## Overview
+# StudySpace
+
+A UCLA classroom availability platform that helps students find available study spaces across campus by scraping and analyzing classroom schedules.
+
+## Overview
 
 This repository contains:
 
 - `generate_urls.py` — generate registrar URLs for classrooms
 - `scrape.py` — scrape classroom schedules (Selenium, parallel)
 - `classrooms.json` — the scraped data consumed by the frontend
-- `main.html` — a static frontend that renders rooms from `classrooms.json`
+- `index.html` — a static frontend that renders rooms from `classrooms.json`
 
 The frontend is intentionally simple: a single static HTML file reads `classrooms.json` and performs client-side filtering and display.
 
@@ -17,14 +22,14 @@ The frontend is intentionally simple: a single static HTML file reads `classroom
 
 ### Frontend
 
-- The user-facing site is `main.html`.
+- The user-facing site is `index.html`.
 - On load it fetches `classrooms.json` and filters for rooms with `offered: true`.
 - JavaScript in the page builds the UI: building dropdown, capacity min/max, text search, day buttons, time range selectors, and characteristic checkboxes.
 - Each room card shows basic info (building, capacity, type), optional image, a list of characteristics, and a schedule summary with free times.
 
 ### Data contract
 
-`main.html` expects `classrooms.json` to contain an array of objects with fields like:
+`index.html` expects `classrooms.json` to contain an array of objects with fields like:
 
 ```json
 {
@@ -47,16 +52,16 @@ The frontend is intentionally simple: a single static HTML file reads `classroom
 
 ## Quick start (run locally)
 
-> Browsers block fetch() on `file://` origins. Serve the repo directory over HTTP.
+Browsers block fetch() on `file://` origins. Serve the repo directory over HTTP.
 
 Python 3 built-in server:
 
 ```bash
 python3 -m http.server 8000
-# Open http://localhost:8000/main.html
+# Open http://localhost:8000/index.html
 ```
 
-Or use VS Code Live Server to preview `main.html`.
+Or use VS Code Live Server to preview `index.html`.
 
 ## Updating the scraped data
 
@@ -67,12 +72,12 @@ Or use VS Code Live Server to preview `main.html`.
 ## Troubleshooting
 
 - "Loading classroom data..." forever: make sure you served the files over HTTP and `classrooms.json` is valid JSON.
-- CORS errors: ensure `classrooms.json` is served from the same origin as `main.html` or enable appropriate CORS headers on the host.
+- CORS errors: ensure `classrooms.json` is served from the same origin as `index.html` or enable appropriate CORS headers on the host.
 - Broken images: images are optional and hidden if they fail to load.
 
 ## Deployment notes
 
-- GitHub Pages: push `main.html` and `classrooms.json` to a branch used by Pages (e.g., `master`/`gh-pages`).
+- GitHub Pages: push `index.html` and `classrooms.json` to a branch used by Pages (e.g., `master`/`gh-pages`).
 - CI: if you automate scraping, run the scraper on a trusted runner and push the updated `classrooms.json` to the Pages branch. Be careful storing credentials and obey UCLA's scraping policies.
 
 ## Development notes
@@ -91,6 +96,6 @@ Educational use only. Please respect UCLA's servers: use reasonable rate-limitin
 
 ---
 
-**Built by UCLA students, for UCLA students.** 🐻💙💛
+**Built and maintained by Taylor Nilsen.** 🐻💙💛
 
 © 2025 Taylor Nilsen — https://github.com/Taylor-Nilsen
