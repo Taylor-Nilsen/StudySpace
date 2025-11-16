@@ -226,11 +226,17 @@ def main(limit=None, num_processes=4, batch_size=None):
         print("ERROR: No classrooms found in classrooms.json")
         return
     
-    # Filter for only offered classrooms
-    classrooms_to_scrape = [c for c in all_classrooms if c.get('offered', False)]
+    # Filter for only offered classrooms and track their indices in the original list
+    classrooms_to_scrape = []
+    original_indices = []
+    for i, classroom in enumerate(all_classrooms):
+        if classroom.get('offered', False):
+            classrooms_to_scrape.append(classroom)
+            original_indices.append(i)
     
     if limit and limit > 0:
         classrooms_to_scrape = classrooms_to_scrape[:limit]
+        original_indices = original_indices[:limit]
     
     total_classrooms = len(classrooms_to_scrape)
     
@@ -258,7 +264,9 @@ def main(limit=None, num_processes=4, batch_size=None):
             batch_results = pool.map(process_classroom_worker, batch_items)
             
             for index, classroom_data, stats in batch_results:
+                # Update both the filtered list and the original list
                 classrooms_to_scrape[index - 1] = classroom_data
+                all_classrooms[original_indices[index - 1]] = classroom_data
                 
                 total_success += stats['success']
                 total_no_calendar += stats['no_calendar']
