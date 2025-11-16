@@ -33,6 +33,19 @@ def scrape_classroom_schedule(url, driver):
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
         
+        # Extract room characteristics
+        characteristics = []
+        characteristics_list = soup.find('ul', {'class': 'room-attributes', 'id': 'characteristics-list'})
+        if characteristics_list:
+            for li in characteristics_list.find_all('li'):
+                # Use .string instead of .get_text() due to BeautifulSoup quirk with whitespace
+                characteristic = li.string
+                if characteristic:
+                    # Strip the whitespace manually
+                    characteristic = characteristic.strip()
+                    if characteristic:
+                        characteristics.append(characteristic)
+        
         calendar_data = None
         
         for script in soup.find_all('script'):
@@ -44,7 +57,7 @@ def scrape_classroom_schedule(url, driver):
                     try:
                         calendar_data = json.loads(json_str)
                         if len(calendar_data) == 0:
-                            return {"no_calendar": True, "schedule": {}}
+                            return {"no_calendar": True, "schedule": {}, "characteristics": characteristics}
                         break
                     except json.JSONDecodeError:
                         pass
@@ -52,8 +65,8 @@ def scrape_classroom_schedule(url, driver):
         if not calendar_data:
             calendar_div = soup.find('div', id='calendar')
             if calendar_div and ('no classes' in calendar_div.get_text(strip=True).lower() or not calendar_div.get_text(strip=True)):
-                return {"no_calendar": True, "schedule": {}}
-            return {"no_calendar": True, "schedule": {}}
+                return {"no_calendar": True, "schedule": {}, "characteristics": characteristics}
+            return {"no_calendar": True, "schedule": {}, "characteristics": characteristics}
         
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         schedule = {day: [] for day in days}
@@ -149,7 +162,7 @@ def scrape_classroom_schedule(url, driver):
         for day in schedule:
             schedule[day].sort(key=lambda x: x['start_time'])
         
-        return {"no_calendar": False, "schedule": schedule}
+        return {"no_calendar": False, "schedule": schedule, "characteristics": characteristics}
         
     except Exception:
         return None
@@ -183,6 +196,9 @@ def process_classroom_worker(args):
         if result:
             schedule = result.get('schedule', {})
             has_no_calendar = result.get('no_calendar', False)
+            characteristics = result.get('characteristics', [])
+            
+            classroom['characteristics'] = characteristics
             
             if has_no_calendar:
                 classroom['schedule'] = None
