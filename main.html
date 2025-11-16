@@ -137,6 +137,21 @@
             border-color: #2563eb;
         }
 
+        .room-image {
+            width: 220px;
+            margin-bottom: 12px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .room-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
         .room-header {
             display: flex;
             justify-content: space-between;
@@ -754,6 +769,11 @@
                 
                 return `
                     <div class="room-card">
+                        ${room.image_url ? `
+                            <div class="room-image">
+                                <img src="${room.image_url}" alt="${room.text}" onerror="this.parentElement.style.display='none'" loading="lazy" />
+                            </div>
+                        ` : ''}
                         <div class="room-header">
                             <div>
                                 <div class="room-title">${room.text}</div>
