@@ -413,6 +413,20 @@
         .time-picker select {
             flex: 1;
         }
+        /* Footer styles */
+        .site-footer {
+            background: #f8fafc;
+            color: #555;
+            text-align: center;
+            padding: 12px 20px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+
+        .site-footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -536,6 +550,10 @@
             document.querySelector('.day-btn[data-day=""]').classList.add('active');
 
             // Load JSON data
+            // Set dynamic footer year
+            const yearSpan = document.getElementById('site-year');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
             loadData();
         });
 
@@ -852,5 +870,10 @@
             button.textContent = scheduleGrid.classList.contains('active') ? 'Hide Schedule' : 'Show Schedule';
         }
     </script>
+    <footer class="site-footer">
+        <div class="container" style="max-width:1400px;">
+            <p>© <span id="site-year"></span> Taylor Nilsen. Built by Taylor Nilsen. GitHub: <a href="https://github.com/Taylor-Nilsen" target="_blank" rel="noopener">Taylor-Nilsen</a></p>
+        </div>
+    </footer>
 </body>
 </html>
