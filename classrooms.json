@@ -376,7 +376,12 @@
         "capacity": 72,
         "type": "Classroom",
         "url": "https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom=BOELTER+%7C++02760++",
-        "characteristics": [],
+        "characteristics": [
+            "Air Conditioning",
+            "Whiteboard",
+            "Auditorium Setting",
+            "Projection Screen"
+        ],
         "schedule": {
             "Monday": [
                 {
@@ -4158,7 +4163,8 @@
             "Seminar Setting",
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -5550,7 +5556,8 @@
             "Installed 35Mm Slide Projector",
             "Vhs Deck-Installed",
             "Video Projector-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -6118,7 +6125,8 @@
             "Projection Screen",
             "Seminar Setting",
             "35Mm Slide Projector-Capable",
-            "Vhs Deck-Installed"
+            "Vhs Deck-Installed",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -8029,7 +8037,8 @@
             "Installed 35Mm Slide Projector",
             "Vhs Deck-Installed",
             "Video Projector-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -19470,7 +19479,8 @@
             "Projection Screen",
             "Seminar Setting",
             "Vhs Deck-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -23577,7 +23587,11 @@
         "capacity": 115,
         "type": "Classroom",
         "url": "https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom=KAPLAN++%7C++00135++",
-        "characteristics": [],
+        "characteristics": [
+            "Projector",
+            "Whiteboard",
+            "Auditorium Setting"
+        ],
         "schedule": {
             "Monday": [
                 {
@@ -23779,7 +23793,11 @@
         "capacity": 115,
         "type": "Classroom",
         "url": "https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom=KAPLAN++%7C++00169++",
-        "characteristics": [],
+        "characteristics": [
+            "Projector",
+            "Whiteboard",
+            "Auditorium Setting"
+        ],
         "schedule": {
             "Monday": [
                 {
@@ -26453,7 +26471,8 @@
             "35Mm Slide Projector-Capable",
             "Fixed Tables-Cont Writ Surfaces",
             "Vhs Deck-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -26824,7 +26843,8 @@
             "Seminar Setting",
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -30921,6 +30941,7 @@
             "35Mm Slide Projector-Capable",
             "Movable Tables And Chairs",
             "Video Projector Vhs/Ld-Capable"
+
         ],
         "schedule": {
             "Monday": [
@@ -31874,7 +31895,8 @@
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
             "Video Projector-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -47501,7 +47523,8 @@
             "Projection Screen",
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -48392,7 +48415,8 @@
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
             "Video Projector Vhs/Ld-Capable",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
@@ -48807,7 +48831,8 @@
             "35Mm Slide Projector-Capable",
             "Vhs Deck-Installed",
             "Video Projector Vhs/Ld-Capable",
-            "Windows"
+            "Windows",
+            "Whiteboard"
         ],
         "schedule": {
             "Monday": [
