@@ -38,7 +38,7 @@ def normalize_room_number(room):
 def generate_urls(classroom_list, offered_rooms=None, building_name_map=None):
     """
     Function to generate URLs for each classroom based on building and room.
-    URL format: https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom={encoded_value}
+    URL format: https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=26W&classroom={encoded_value}
     
     Args:
         classroom_list: List of classroom dictionaries with 'text' and 'value' keys
@@ -89,7 +89,7 @@ def generate_urls(classroom_list, offered_rooms=None, building_name_map=None):
             
         # Encode the value: replace | with %7C and spaces with +
         encoded_classroom = value.replace('|', '%7C').replace(' ', '+')
-        url = f"https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=25F&classroom={encoded_classroom}"
+        url = f"https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=26W&classroom={encoded_classroom}"
         classroom['url'] = url
         # Remove the original value
         del classroom['value']
@@ -1237,7 +1237,7 @@ def main():
     {"text": "YRL      A1713A", "value": "YRL     | A01713A "},
     ]
 
-    offered_rooms_25F = [
+    offered_rooms = [
         {"building": "Boelter Hall", "room": "2444", "capacity": 80, "type": "Classroom"},
         {"building": "Boelter Hall", "room": "2760", "capacity": 72, "type": "Classroom"},
         {"building": "Boelter Hall", "room": "3400", "capacity": 174, "type": "Classroom"},
@@ -1432,7 +1432,7 @@ def main():
     print(f"Generating URLs for {len(classroom_options)} classrooms...")
     
     # Generate URLs for the classrooms
-    filled_classrooms = generate_urls(classroom_options, offered_rooms_25F, building_name_map)
+    filled_classrooms = generate_urls(classroom_options, offered_rooms, building_name_map)
     
     # Save to JSON
     print("Saving to classrooms.json...")

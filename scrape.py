@@ -229,7 +229,7 @@ def process_classroom_worker(args):
             driver.quit()
 
 
-def main(limit=None, num_processes=4, batch_size=None):
+def main(limit=None, num_processes=8, batch_size=None):
     """Main function to scrape schedules from all classrooms using multiprocessing"""
     with open('classrooms.json', 'r') as f:
         all_classrooms = json.load(f)
