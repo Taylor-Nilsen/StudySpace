@@ -89,7 +89,7 @@ def generate_urls(classroom_list, offered_rooms=None, building_name_map=None):
             
         # Encode the value: replace | with %7C and spaces with +
         encoded_classroom = value.replace('|', '%7C').replace(' ', '+')
-        url = f"https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=26W&classroom={encoded_classroom}"
+        url = f"https://sa.ucla.edu/ro/Public/SOC/Results/ClassroomDetail?term=26S&classroom={encoded_classroom}"
         classroom['url'] = url
         # Remove the original value
         del classroom['value']
