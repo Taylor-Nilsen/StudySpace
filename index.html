@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>UCLA StudySpace — New</title>
+    <title>UCLA StudySpace</title>
     <style>
         :root{--accent:#2563eb;--muted:#6b7280;--bg:#f8fafc}
         *{box-sizing:border-box}
@@ -302,8 +302,22 @@
         setDefaultTimesAndDay(); loadData();
     });
 
+    function getTermLabel(termCode){
+        if(!termCode) return '';
+        const match=termCode.match(/(\d{2})([WSUF])/);
+        if(!match) return '';
+        const [, year, quarter]=match;
+        const fullYear='20'+year;
+        const quarters={'W':'Winter','S':'Spring','U':'Summer','F':'Fall'};
+        return (quarters[quarter]||'')+' '+fullYear;
+    }
+    function extractTermCode(url){
+        if(!url) return '';
+        const match=url.match(/term=(\d{2}[WSUF])/);
+        return match?match[1]:'';
+    }
     function loadData(){ const r=document.getElementById('results'); r.innerHTML='<div class="loading">Loading…</div>'; fetch('classrooms.json').then(res=>{ if(!res.ok) throw new Error('not found'); return res.json() }).then(d=>useData(d)).catch(err=>{ console.warn('fetch failed',err); const embedded=document.getElementById('embeddedSample'); if(embedded){ try{ return useData(JSON.parse(embedded.textContent)); }catch(e){console.error('embedded parse',e);} } fetch('data/sample.json').then(res=>res.json()).then(d=>useData(d)).catch(e=>{ console.error('no data',e); classroomsData=[]; dataLoaded=true; initializeFilters(); renderResults(); r.innerHTML='<div class="no-results"><h2>No data</h2><p>Add classrooms.json or run via server to use the full dataset.</p></div>';}); }); }
-    function useData(raw){ classroomsData=raw.filter(r=>r.offered!==false); dataLoaded=true; initializeFilters(); renderResults(); }
+    function useData(raw){ classroomsData=raw.filter(r=>r.offered!==false); if(classroomsData.length>0&&classroomsData[0].url){ const term=extractTermCode(classroomsData[0].url); const label=getTermLabel(term); if(label) document.title='UCLA StudySpace '+label; } dataLoaded=true; initializeFilters(); renderResults(); }
 
     function initializeFilters(){
         // Start from defaults and merge any characteristics found in data
