@@ -1,0 +1,89 @@
+name: Update Classroom Data for New Quarter
+
+on:
+  schedule:
+    # Run at 6 AM UTC on the first day of each UCLA quarter
+    # Spring (March 17), Summer (June 17), Fall (Sept 29), Winter (Jan 6)
+    - cron: '0 6 17 3 *'  # Spring Quarter
+    - cron: '0 6 17 6 *'  # Summer Quarter
+    - cron: '0 6 29 9 *'  # Fall Quarter
+    - cron: '0 6 6 1 *'   # Winter Quarter
+  
+  # Also allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-classrooms:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Detect quarter and update term code
+        id: quarter
+        run: |
+          import datetime
+          import re
+          
+          today = datetime.date.today()
+          year = today.year % 100  # Get last 2 digits of year
+          month = today.month
+          
+          # Determine quarter and term code
+          if month in [1, 2, 3]:
+              quarter = "Winter"
+              term_code = f"{year}W"
+          elif month in [4, 5, 6]:
+              quarter = "Spring"
+              term_code = f"{year}S"
+          elif month in [7, 8, 9]:
+              quarter = "Summer"
+              term_code = f"{year}U"
+          else:
+              quarter = "Fall"
+              term_code = f"{year}F"
+          
+          print(f"::set-output name=quarter::{quarter}")
+          print(f"::set-output name=term_code::{term_code}")
+          
+          # Update generate_urls.py with new term code
+          with open('generate_urls.py', 'r') as f:
+              content = f.read()
+          
+          # Replace term code in URL generation
+          old_pattern = r'term=\d{2}[WSUF]'
+          new_content = re.sub(old_pattern, f'term={term_code}', content)
+          
+          with open('generate_urls.py', 'w') as f:
+              f.write(new_content)
+          
+          print(f"Updated term code to: {term_code}")
+        shell: python3 {0}
+      
+      - name: Generate URLs
+        run: python generate_urls.py
+      
+      - name: Scrape classroom data
+        run: python scrape.py 0 4
+        timeout-minutes: 120
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add classrooms.json generate_urls.py
+          git commit -m "chore: update classroom data for ${{ steps.quarter.outputs.quarter }} quarter ${{ steps.quarter.outputs.term_code }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
