@@ -29,6 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install requests
       
       - name: Detect quarter and update term code
         id: quarter
@@ -81,11 +82,14 @@ jobs:
       - name: Add classroom images
         run: python add_images.py
       
+      - name: Download and cache images locally
+        run: python download_images.py
+      
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add classrooms.json generate_urls.py
+          git add classrooms.json generate_urls.py images/
           git commit -m "chore: update classroom data for ${{ steps.quarter.outputs.quarter }} quarter ${{ steps.quarter.outputs.term_code }}"
           git push
         env:

@@ -4,6 +4,4 @@ beautifulsoup4>=4.11.1
 selenium>=4.8.0
 lxml>=4.9.2
 webdriver-manager>=3.8.5
-
-# Optional: add requests if you plan to fetch pages without Selenium
-# requests>=2.31.0
+requests>=2.31.0

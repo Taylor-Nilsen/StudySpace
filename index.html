@@ -360,8 +360,8 @@
             const chars=r.characteristics? r.characteristics.map(c=>`<span class="char-tag">${c}</span>`).join('') : '';
             let imgHtml = '';
             if (r.image_url) {
-                // Image with loading states and CORS support
-                imgHtml = `<div class="room-image"><img src="${r.image_url}" alt="${r.text}" loading="lazy" decoding="async" crossorigin="anonymous" class="loading" onload="this.classList.remove('loading')" onerror="this.closest('.room-image').parentElement.classList.add('no-image');this.closest('.room-image').style.display='none'"></div>`;
+                // Image with loading states; fails silently due to CORS restrictions
+                imgHtml = `<div class="room-image"><img src="${r.image_url}" alt="${r.text}" loading="lazy" decoding="async" class="loading" onload="this.classList.remove('loading')" onerror="this.closest('.room-image').parentElement.classList.add('no-image');this.closest('.room-image').style.display='none'"></div>`;
             }
             const scheduleHtml = daysToShow.map(d=>{
                 const ds=(r.schedule&&r.schedule[d])||[]; const free=getFreeTimes(r,d);
