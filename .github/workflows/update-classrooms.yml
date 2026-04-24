@@ -78,6 +78,9 @@ jobs:
         run: python scrape.py 0 4
         timeout-minutes: 120
       
+      - name: Add classroom images
+        run: python add_images.py
+      
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
