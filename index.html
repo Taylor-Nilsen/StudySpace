@@ -156,7 +156,7 @@
                     </div>
                     <div class="filter-group">
                         <label for="sortBy">Sort</label>
-                        <select id="sortBy"><option value="available">Available Now</option><option value="capacity_desc">Capacity ↓</option><option value="capacity_asc">Capacity ↑</option><option value="building">Building</option></select>
+                        <select id="sortBy"><option value="capacity_asc">Capacity ↑</option><option value="capacity_desc">Capacity ↓</option><option value="building">Building</option></select>
                     </div>
                 </div>
 
@@ -401,7 +401,7 @@
     function selectAllCharacteristics(){ document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(cb=>{ cb.checked = true; selectedCharacteristics.add(cb.value); }); handleFilterChange(); }
     function clearCharacteristics(){ document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(cb=>{ cb.checked = false; }); selectedCharacteristics.clear(); handleFilterChange(); }
 
-    function clearFilters(){ document.getElementById('capacityFilter').value=''; document.getElementById('maxCapacityFilter').value=''; document.getElementById('roomSearch').value=''; document.getElementById('startTime').value=''; document.getElementById('endTime').value=''; document.getElementById('sortBy').value='available'; selectedDay=''; selectedCharacteristics.clear(); selectedBuildings.clear(); document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('#buildingDropdown input[type="checkbox"]').forEach(cb=>cb.checked=false); document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(cb=>cb.checked=false); updateBuildingDisplay(); handleFilterChange(); }
+    function clearFilters(){ document.getElementById('capacityFilter').value=''; document.getElementById('maxCapacityFilter').value=''; document.getElementById('roomSearch').value=''; document.getElementById('startTime').value=''; document.getElementById('endTime').value=''; document.getElementById('sortBy').value='capacity_asc'; selectedDay=''; selectedCharacteristics.clear(); selectedBuildings.clear(); document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('#buildingDropdown input[type="checkbox"]').forEach(cb=>cb.checked=false); document.querySelectorAll('#characteristicsFilter input[type="checkbox"]').forEach(cb=>cb.checked=false); updateBuildingDisplay(); handleFilterChange(); }
 
     function timeToMinutes(timeStr){ const [time,period]=timeStr.split(' '); let [h,m]=time.split(':').map(Number); if(period==='PM'&&h!==12)h+=12; if(period==='AM'&&h===12)h=0; return h*60+m; }
     function isRoomFreeAtTime(room,day,startTime,endTime){ if(!startTime||!endTime) return true; if(!room.schedule||!room.schedule[day]) return true; const rs=timeToMinutes(startTime), re=timeToMinutes(endTime); for(const s of room.schedule[day]){ const ss=timeToMinutes(s.start_time), se=timeToMinutes(s.end_time); if(!(re<=ss || rs>=se)) return false; } return true; }
@@ -569,7 +569,7 @@
                 <div class="room-card ${r.image_url ? '' : 'no-image'}">
                     ${imgHtml}
                     <div class="room-body">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 class="room-title">${r.text}</h3><span style="font-size:0.8rem;color:#94a3b8">${selectedDay ? calculateDayAvailability(r, selectedDay) + '%' : ''}</span></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 class="room-title">${r.text}</h3><span style="font-size:0.8rem;color:#94a3b8">${selectedDay ? calculateDayAvailability(r, selectedDay).percentage + '%' : ''}</span></div>
                         <div class="room-info"><span class="badge">${r.building||''}</span>${r.capacity?`<span class="badge">Cap ${r.capacity}</span>`:''}${r.type?`<span class="badge">${r.type}</span>`:''}</div>
                         <div style="margin-top:8px"><button class="btn btn-details" onclick="toggleDetails(this)">Details ▾</button></div>
                         <div class="details">
@@ -582,7 +582,7 @@
             `;
         }).join(''); }
 
-    function setDefaultTimesAndDay(){ const s=document.getElementById('startTime'), e=document.getElementById('endTime'); if(!s||!e) return; const now=new Date(); let h=now.getHours(); if(h<8)h=8; if(h>22)h=22; const fmt=h=>{ const p=h>=12?'PM':'AM'; let hh=h%12; if(hh===0)hh=12; return (hh<10?'0'+hh:hh)+':00 '+p }; s.value=[...s.options].some(o=>o.value===fmt(h))?fmt(h):''; e.value=[...e.options].some(o=>o.value===fmt(Math.min(h+2,22)))?fmt(Math.min(h+2,22)):''; const today=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]; const btn=document.querySelector(`.day-btn[data-day="${today}"]`); if(btn){ document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); selectedDay=today } document.getElementById('sortBy').value='available'; }
+    function setDefaultTimesAndDay(){ const s=document.getElementById('startTime'), e=document.getElementById('endTime'); if(!s||!e) return; const now=new Date(); let h=now.getHours(); if(h<8)h=8; if(h>22)h=22; const fmt=h=>{ const p=h>=12?'PM':'AM'; let hh=h%12; if(hh===0)hh=12; return (hh<10?'0'+hh:hh)+':00 '+p }; s.value=[...s.options].some(o=>o.value===fmt(h))?fmt(h):''; e.value=[...e.options].some(o=>o.value===fmt(Math.min(h+2,22)))?fmt(Math.min(h+2,22)):''; const today=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]; const btn=document.querySelector(`.day-btn[data-day="${today}"]`); if(btn){ document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); selectedDay=today } document.getElementById('sortBy').value='capacity_asc'; }
 
     function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms) } }
     </script>
