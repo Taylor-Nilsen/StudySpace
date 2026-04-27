@@ -435,7 +435,8 @@
         });
         const totalHours=10; // 8am to 6pm
         const percentOccupied=Math.round((occupiedHours.size/totalHours)*100);
-        return percentOccupied;
+        const percentAvailable=100-percentOccupied;
+        return percentAvailable;
     }
 
     function buildCalendarGrid(room){
