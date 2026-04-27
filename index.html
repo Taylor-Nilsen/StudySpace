@@ -149,7 +149,7 @@
                     </div>
                     <div class="filter-group">
                         <label for="sortBy">Sort</label>
-                        <select id="sortBy"><option value="availability">Availability</option><option value="capacity_desc">Capacity ↓</option><option value="capacity_asc">Capacity ↑</option></select>
+                        <select id="sortBy"><option value="availability">Availability</option><option value="capacity_desc">High Capacity</option><option value="capacity_asc">Low Capacity</option></select>
                     </div>
                 </div>
 
@@ -463,7 +463,7 @@
     function getFreeTimes(room,day){ if(!room.schedule||!room.schedule[day]||room.schedule[day].length===0) return ['All day']; const schedule=room.schedule[day].slice().sort((a,b)=>timeToMinutes(a.start_time)-timeToMinutes(b.start_time)); const free=[]; let last=timeToMinutes('08:00 AM'); for(const s of schedule){ const ss=timeToMinutes(s.start_time); if(ss>last) free.push(`${formatTime(last)} - ${s.start_time}`); last=Math.max(last,timeToMinutes(s.end_time)); } if(last<timeToMinutes('10:00 PM')) free.push(`${formatTime(last)} - 10:00 PM`); return free; }
     function formatTime(minutes){ let h=Math.floor(minutes/60), m=minutes%60, period=h>=12?'PM':'AM'; h=h%12; if(h===0)h=12; return (h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' '+period; }
 
-    function sortRooms(list){ const s=document.getElementById('sortBy').value; if(s==='capacity_desc') return list.sort((a,b)=>(b.capacity||0)-(a.capacity||0)); if(s==='capacity_asc') return list.sort((a,b)=>(a.capacity||0)-(b.capacity||0)); if(s==='availability'){ const day=selectedDay || ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()]; return list.sort((a,b)=> calculateDayAvailability(b,day).percentage - calculateDayAvailability(a,day).percentage); } return list; }
+    function sortRooms(list){ const s=document.getElementById('sortBy').value; if(s==='capacity_desc') return list.sort((a,b)=>(b.capacity||0)-(a.capacity||0)); if(s==='capacity_asc') return list.sort((a,b)=>(a.capacity||0)-(b.capacity||0)); if(s==='availability'){ const day=selectedDay || ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()]; return list.sort((a,b)=> calculateDayAvailability(b,day) - calculateDayAvailability(a,day)); } return list; }
 
     function renderResults(){ const minCap=parseInt(document.getElementById('capacityFilter').value)||0; const maxCap=parseInt(document.getElementById('maxCapacityFilter').value)||Infinity; const q=document.getElementById('roomSearch').value.toLowerCase(); const start=document.getElementById('startTime').value; const end=document.getElementById('endTime').value;
         let filtered=classroomsData.filter(r=>{ if(minCap && (!r.capacity || r.capacity<minCap)) return false; if(maxCap!==Infinity && r.capacity && r.capacity>maxCap) return false; if(q && !((r.text||'').toLowerCase().includes(q) || (r.building||'').toLowerCase().includes(q))) return false; if(selectedCharacteristics.size>0){ if(!r.characteristics) return false; for(const c of selectedCharacteristics) if(!r.characteristics.includes(c)) return false; } if(start&&end){ if(selectedDay){ if(!isRoomFreeAtTime(r,selectedDay,start,end)) return false; } else{ const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; if(!days.some(d=>isRoomFreeAtTime(r,d,start,end))) return false; } } return true; });
