@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>UCLA StudySpace</title>
     <style>
-        :root{--accent:#2563eb;--muted:#6b7280;--bg:#f8fafc}
+        :root{--accent:#60a5fa;--muted:#9ca3af;--bg:#0f172a}
         *{box-sizing:border-box}
-        body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;background:var(--bg);margin:0}
+        body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;background:var(--bg);margin:0;color:#e2e8f0}
+        label{color:#e2e8f0}
+        a{color:#60a5fa}
+        a:hover{color:#93c5fd}
         /* keep small equal side padding (matches header top padding) and constrain width */
-        .container{max-width:calc(100% - 40px);margin:20px auto;padding:0 20px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(15,23,42,0.06)}
-        header{padding:20px 24px;border-bottom:1px solid #eef2ff;background:linear-gradient(90deg, #f8fbff, #fff)}
-        header h1{margin:0;font-size:1.2rem}
+        .container{max-width:calc(100% - 40px);margin:20px auto;padding:0 20px;background:#1e293b;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.3)}
+        header{padding:20px 24px;border-bottom:1px solid #334155;background:linear-gradient(90deg, #1e293b, #0f172a)}
+        header h1{margin:0;font-size:1.2rem;color:#f1f5f9}
         header p{margin:6px 0 0;color:var(--muted);font-size:0.95rem}
         /* Single-column layout: filters on top, results below */
         main{display:block;gap:0;padding:8px 0}
@@ -24,36 +27,36 @@
         .search-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
         .search-row input{flex:1 1 320px;min-width:120px}
         .search-row select{flex:1 1 200px;min-width:120px}
-        input,select{padding:8px;border:1px solid #e6eef8;border-radius:6px;background:#fff}
+        input,select{padding:8px;border:1px solid #334155;border-radius:6px;background:#0f172a;color:#e2e8f0}
         .filters-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .selectors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-        .filter-group{display:flex;flex-direction:column;gap:6px}
+        .selectors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;color:#e2e8f0}
+        .filter-group{display:flex;flex-direction:column;gap:6px;color:#e2e8f0}
         .filter-group.wide{grid-column:1 / -1}
         .day-time-row{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:12px}
         .characteristics-row{margin-top:12px}
         /* Characteristics: groups distributed into balanced vertical columns */
-        .checkbox-group{display:block;max-height:320px;overflow:auto;padding:12px;border:1px solid #eef2ff;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff)}
+        .checkbox-group{display:block;max-height:320px;overflow:auto;padding:12px;border:1px solid #334155;border-radius:10px;background:#1e293b}
         .checkbox-group::-webkit-scrollbar{height:8px;width:8px}
-        .checkbox-group::-webkit-scrollbar-thumb{background:rgba(15,23,42,0.08);border-radius:8px}
+        .checkbox-group::-webkit-scrollbar-thumb{background:rgba(96,165,250,0.2);border-radius:8px}
         .char-columns{display:flex;gap:16px;align-items:flex-start}
         .char-column{flex:1 1 240px;min-width:200px;max-width:360px;display:flex;flex-direction:column;gap:8px}
-        .char-group{background:transparent;border:1px solid rgba(15,23,42,0.03);padding:6px;border-radius:6px;margin:0}
-        .char-group-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-weight:600;color:#0f172a;font-size:0.95rem}
+        .char-group{background:transparent;border:1px solid #334155;padding:6px;border-radius:6px;margin:0}
+        .char-group-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-weight:600;color:#e2e8f0;font-size:0.95rem}
         .char-group-list{display:flex;flex-direction:column;gap:4px}
         .checkbox-item{display:flex;align-items:center;gap:6px;padding:2px 4px;border-radius:4px;transition:background .12s ease}
-        .checkbox-item:hover{background:rgba(37,99,235,0.04)}
+        .checkbox-item:hover{background:rgba(96,165,250,0.1)}
         .checkbox-item input{width:auto;height:auto;margin:0;accent-color:var(--accent)}
-        .checkbox-item label{font-size:0.92rem;color:#0f172a;line-height:1.1}
+        .checkbox-item label{font-size:0.92rem;color:#e2e8f0;line-height:1.1}
         @media (max-width:1000px){ .char-columns{gap:12px} }
         @media (max-width:700px){ .char-columns{flex-direction:column} .char-column{max-width:none;min-width:0} }
 
         .controls-actions{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
         /* Make the full-filters section span the full width above the columns */
-        .full-filters{flex-basis:100%;width:100%;padding:12px 20px;border-bottom:1px solid #f1f5f9;background:#fff}
+        .full-filters{flex-basis:100%;width:100%;padding:12px 20px;border-bottom:1px solid #334155;background:#1e293b}
         /* Ensure on narrow screens selectors stack and characteristics remain full width */
         @media (max-width:880px){ .selectors-grid{grid-template-columns:1fr} .day-time-row{flex-direction:column;align-items:stretch} .checkbox-group{max-height:160px} }
         .day-filter{display:flex;gap:6px}
-        .day-btn{padding:6px 8px;border-radius:6px;border:1px solid #e6eef8;background:#fff;cursor:pointer}
+        .day-btn{padding:6px 8px;border-radius:6px;border:1px solid #334155;background:#0f172a;cursor:pointer;color:#e2e8f0}
         .day-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
         .time-picker{display:flex;gap:6px;align-items:center}
 
@@ -61,10 +64,10 @@
         .controls-actions{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
         /* Center column: slightly larger cards to better occupy center space */
         .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-        .room-card{background:#fff;border:1px solid #eef2ff;padding:12px;border-radius:12px;transition:transform .12s ease,box-shadow .12s ease}
-        .room-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(15,23,42,0.08);border-color:rgba(37,99,235,0.08)}
+        .room-card{background:#1e293b;border:1px solid #334155;padding:12px;border-radius:12px;transition:transform .12s ease,box-shadow .12s ease}
+        .room-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.3);border-color:rgba(96,165,250,0.2)}
         /* Use a consistent 4:3 aspect ratio for room images */
-        .room-image{width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:8px;margin-bottom:10px;max-height:360px;min-height:120px;background:#f0f4f8}
+        .room-image{width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:8px;margin-bottom:10px;max-height:360px;min-height:120px;background:#0f172a}
         .room-image img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;opacity:1;transition:opacity 0.3s}
         .room-image img.loading{opacity:0.5}
         .room-card.no-image .room-image{display:none}
@@ -77,24 +80,38 @@
         @media (max-width:1000px){ .results{grid-template-columns:repeat(2,1fr)} }
         @media (max-width:640px){ .results{grid-template-columns:repeat(1,1fr)} }
         /* Button styles */
-        .btn{background:#fff;border:1px solid #e6eef8;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:#0f172a;transition:all .12s ease;box-shadow:0 1px 0 rgba(15,23,42,0.02)}
-        .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(15,23,42,0.06)}
-        .btn:focus{outline:3px solid rgba(37,99,235,0.12)}
+        .btn{background:#0f172a;border:1px solid #334155;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:#e2e8f0;transition:all .12s ease;box-shadow:0 1px 0 rgba(0,0,0,0.1)}
+        .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(96,165,250,0.1);border-color:#60a5fa}
+        .btn:focus{outline:3px solid rgba(96,165,250,0.2)}
         .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-        .btn-secondary{background:#fff;color:inherit;border-color:#e6eef8}
+        .btn-secondary{background:#0f172a;color:#e2e8f0;border-color:#334155}
 
         /* Details panel styling */
-        .details{display:none;margin-top:8px;padding:12px;border-radius:6px;background:linear-gradient(90deg,#fbfdff,#fff);border:1px solid #e6eef8}
+        .details{display:none;margin-top:8px;padding:12px;border-radius:6px;background:linear-gradient(90deg,#1e293b,#0f172a);border:1px solid #334155}
         .details.active{display:block}
-        .room-title{font-weight:600;margin:0 0 6px}
+        .room-title{font-weight:600;margin:0 0 6px;color:#f1f5f9}
         .room-info{display:flex;gap:8px;align-items:center;font-size:0.9rem;color:var(--muted)}
-        .badge{padding:4px 8px;border-radius:6px;font-size:0.8rem;background:#f1f5f9}
-        .char-tag{display:inline-block;background:#eff6ff;color:var(--accent);padding:4px 6px;border-radius:6px;margin:4px 6px 0 0;font-size:0.78rem;border:1px solid rgba(37,99,235,0.08)}
+        .badge{padding:4px 8px;border-radius:6px;font-size:0.8rem;background:#0f172a;border:1px solid #334155;color:#e2e8f0}
+        .char-tag{display:inline-block;background:#1e3a5f;color:var(--accent);padding:4px 6px;border-radius:6px;margin:4px 6px 0 0;font-size:0.78rem;border:1px solid rgba(96,165,250,0.2)}
         .details .day-name{font-weight:600;color:var(--accent);margin-bottom:6px}
-        .details .free-times{background:#f8fbff;border-radius:6px;padding:6px;margin-top:6px;border:1px solid #e6f0ff;color:var(--muted)}
-        .time-slot{font-size:0.85rem;padding:6px;border-radius:6px;background:#fbfdff;border:1px solid #eef6ff;margin-top:6px}
+        .details .free-times{background:#0f172a;border-radius:6px;padding:6px;margin-top:6px;border:1px solid #334155;color:var(--muted)}
+        .time-slot{font-size:0.85rem;padding:6px;border-radius:6px;background:#0f172a;border:1px solid #334155;margin-top:6px;color:#e2e8f0}
+        .schedule-calendar{display:flex;flex-direction:column;gap:0;border:1px solid #334155;border-radius:8px;overflow:hidden;margin-top:12px;background:#0f172a;min-height:350px}
+        .calendar-header-row{display:flex;gap:0}
+        .calendar-header-time{width:45px;border-right:1px solid #334155;background:#1e293b}
+        .calendar-header-day{flex:1;border-right:1px solid #334155;background:#1e293b;padding:4px;font-weight:600;color:#e2e8f0;text-align:center;font-size:0.7rem;display:flex;align-items:center;justify-content:center}
+        .calendar-header-day:last-child{border-right:none}
+        .calendar-body{display:flex;gap:0;flex:1}
+        .calendar-time-col{width:45px;border-right:1px solid #334155;background:#1e293b;display:flex;flex-direction:column;position:relative;z-index:10}
+        .calendar-time-label{flex:1;font-size:0.65rem;font-weight:500;color:#9ca3af;text-align:center;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(51,65,85,0.2);line-height:1}
+        .calendar-time-label:last-child{border-bottom:none}
+        .calendar-column{flex:1;display:flex;flex-direction:column;border-right:1px solid #334155;position:relative}
+        .calendar-column:last-child{border-right:none}
+        .calendar-day-events{flex:1;position:relative;background:#0f172a}
+        .calendar-day-events::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;background-image:linear-gradient(180deg, transparent calc(6.25% - 1px), rgba(51,65,85,0.2) calc(6.25% - 1px), rgba(51,65,85,0.2) calc(6.25%), transparent calc(6.25%)),linear-gradient(180deg, transparent calc(12.5% - 1px), rgba(51,65,85,0.2) calc(12.5% - 1px), rgba(51,65,85,0.2) calc(12.5%), transparent calc(12.5%)),linear-gradient(180deg, transparent calc(18.75% - 1px), rgba(51,65,85,0.2) calc(18.75% - 1px), rgba(51,65,85,0.2) calc(18.75%), transparent calc(18.75%)),linear-gradient(180deg, transparent calc(25% - 1px), rgba(51,65,85,0.2) calc(25% - 1px), rgba(51,65,85,0.2) calc(25%), transparent calc(25%)),linear-gradient(180deg, transparent calc(31.25% - 1px), rgba(51,65,85,0.2) calc(31.25% - 1px), rgba(51,65,85,0.2) calc(31.25%), transparent calc(31.25%)),linear-gradient(180deg, transparent calc(37.5% - 1px), rgba(51,65,85,0.2) calc(37.5% - 1px), rgba(51,65,85,0.2) calc(37.5%), transparent calc(37.5%)),linear-gradient(180deg, transparent calc(43.75% - 1px), rgba(51,65,85,0.2) calc(43.75% - 1px), rgba(51,65,85,0.2) calc(43.75%), transparent calc(43.75%)),linear-gradient(180deg, transparent calc(50% - 1px), rgba(51,65,85,0.2) calc(50% - 1px), rgba(51,65,85,0.2) calc(50%), transparent calc(50%)),linear-gradient(180deg, transparent calc(56.25% - 1px), rgba(51,65,85,0.2) calc(56.25% - 1px), rgba(51,65,85,0.2) calc(56.25%), transparent calc(56.25%)),linear-gradient(180deg, transparent calc(62.5% - 1px), rgba(51,65,85,0.2) calc(62.5% - 1px), rgba(51,65,85,0.2) calc(62.5%), transparent calc(62.5%)),linear-gradient(180deg, transparent calc(68.75% - 1px), rgba(51,65,85,0.2) calc(68.75% - 1px), rgba(51,65,85,0.2) calc(68.75%), transparent calc(68.75%)),linear-gradient(180deg, transparent calc(75% - 1px), rgba(51,65,85,0.2) calc(75% - 1px), rgba(51,65,85,0.2) calc(75%), transparent calc(75%)),linear-gradient(180deg, transparent calc(81.25% - 1px), rgba(51,65,85,0.2) calc(81.25% - 1px), rgba(51,65,85,0.2) calc(81.25%), transparent calc(81.25%)),linear-gradient(180deg, transparent calc(87.5% - 1px), rgba(51,65,85,0.2) calc(87.5% - 1px), rgba(51,65,85,0.2) calc(87.5%), transparent calc(87.5%)),linear-gradient(180deg, transparent calc(93.75% - 1px), rgba(51,65,85,0.2) calc(93.75% - 1px), rgba(51,65,85,0.2) calc(93.75%), transparent calc(93.75%))}
+        .calendar-event{position:absolute;left:1px;right:1px;background:#3b82f6;border-radius:4px;overflow:hidden;z-index:2}
         .no-results{padding:28px;text-align:center;color:var(--muted)}
-        footer.site-footer{padding:10px;background:#fff;border-top:1px solid #eef2ff;text-align:center;color:var(--muted);font-size:0.85rem}
+        footer.site-footer{padding:10px;background:#1e293b;border-top:1px solid #334155;text-align:center;color:var(--muted);font-size:0.85rem}
         @media (max-width:880px){main{flex-direction:column} .controls{flex:unset;border-right:none;padding-right:0}}
     </style>
 </head>
@@ -136,11 +153,13 @@
                     <div class="filter-group" style="flex:1">
                         <label>📅 Day of Week</label>
                         <div class="day-filter">
+                            <button class="day-btn" data-day="Sunday">Sun</button>
                             <button class="day-btn" data-day="Monday">Mon</button>
                             <button class="day-btn" data-day="Tuesday">Tue</button>
                             <button class="day-btn" data-day="Wednesday">Wed</button>
                             <button class="day-btn" data-day="Thursday">Thu</button>
                             <button class="day-btn" data-day="Friday">Fri</button>
+                            <button class="day-btn" data-day="Saturday">Sat</button>
                         </div>
                     </div>
 
@@ -188,7 +207,7 @@
     // Compact, clear app logic
     let classroomsData=[], allCharacteristics=new Set(), selectedDay='', selectedCharacteristics=new Set(), dataLoaded=false;
     const defaultCharacteristics = ['Air Conditioning','Chalkboard','Projection Screen','Video Projector-Installed','Microphone-Installed'];
-    const timeSlots=['08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM','08:00 PM','09:00 PM','10:00 PM'];
+    const timeSlots=['07:00 AM','08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM','08:00 PM','09:00 PM','10:00 PM'];
 
     // Categories used to group similar characteristics together (ordered)
     const CHARACTERISTIC_CATEGORIES = [
@@ -296,6 +315,22 @@
         // close any open details when clearing filters or loading data
         window.toggleDetails = function(button){ const details = button.closest('.room-card').querySelector('.details'); if(!details) return; details.classList.toggle('active'); button.textContent = details.classList.contains('active') ? 'Details ▴' : 'Details ▾'; };
 
+        // Card click handler - toggle details on click anywhere except buttons and links
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.room-card');
+            if (!card) return;
+            
+            // Don't toggle if clicking on button, link, or their children
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            
+            const details = card.querySelector('.details');
+            const button = card.querySelector('button');
+            if (!details || !button) return;
+            
+            details.classList.toggle('active');
+            button.textContent = details.classList.contains('active') ? 'Details ▴' : 'Details ▾';
+        });
+
         // render default characteristics immediately so checkboxes are visible even before data loads
         renderCharacteristicCheckboxes(defaultCharacteristics, false);
 
@@ -345,28 +380,78 @@
 
     function handleFilterChange(){ if(!dataLoaded) return; renderResults(); }
 
+    function buildCalendarGrid(room){
+        const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        let html=`<div class="schedule-calendar">`;
+        
+        // Header row
+        html+=`<div class="calendar-header-row">`;
+        html+=`<div class="calendar-header-time"></div>`;
+        days.forEach(d=>html+=`<div class="calendar-header-day">${d.slice(0,3)}</div>`);
+        html+=`</div>`;
+        
+        // Body: time column + day columns
+        html+=`<div class="calendar-body">`;
+        
+        // Time column
+        html+=`<div class="calendar-time-col">`;
+        for(let h=7;h<=22;h++){
+            const period=h<12?'AM':'PM';
+            const h12=h===0?12:(h>12?h-12:h);
+            const timeStr=h12+' '+period;
+            html+=`<div class="calendar-time-label">${timeStr}</div>`;
+        }
+        html+=`</div>`;
+        
+        // Day columns
+        days.forEach(d=>{
+            const schedule=room.schedule&&room.schedule[d] ? room.schedule[d] : [];
+            html+=`<div class="calendar-column">`;
+            html+=`<div class="calendar-day-events">`;
+            
+            // Render each event as absolutely positioned block
+            schedule.forEach(event=>{
+                const startMin=timeToMinutes(event.start_time);
+                const endMin=timeToMinutes(event.end_time);
+                const dayStart=7*60; // 7am in minutes
+                const dayEnd=23*60; // 11pm in minutes
+                const dayRange=dayEnd-dayStart; // 16 hours = 960 minutes
+                
+                // Only show events that overlap with 7am-11pm window
+                if(endMin>dayStart && startMin<dayEnd){
+                    const clampedStart=Math.max(startMin, dayStart);
+                    const clampedEnd=Math.min(endMin, dayEnd);
+                    const topPct=((clampedStart-dayStart)/dayRange)*100;
+                    const heightPct=(((clampedEnd-clampedStart))/dayRange)*100;
+                    html+=`<div class="calendar-event" style="top:${topPct}%;height:${heightPct}%"></div>`;
+                }
+            });
+            
+            html+=`</div></div>`;
+        });
+        
+        html+=`</div></div>`;
+        return html;
+    }
+
     function getFreeTimes(room,day){ if(!room.schedule||!room.schedule[day]||room.schedule[day].length===0) return ['All day']; const schedule=room.schedule[day].slice().sort((a,b)=>timeToMinutes(a.start_time)-timeToMinutes(b.start_time)); const free=[]; let last=timeToMinutes('08:00 AM'); for(const s of schedule){ const ss=timeToMinutes(s.start_time); if(ss>last) free.push(`${formatTime(last)} - ${s.start_time}`); last=Math.max(last,timeToMinutes(s.end_time)); } if(last<timeToMinutes('10:00 PM')) free.push(`${formatTime(last)} - 10:00 PM`); return free; }
     function formatTime(minutes){ let h=Math.floor(minutes/60), m=minutes%60, period=h>=12?'PM':'AM'; h=h%12; if(h===0)h=12; return (h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' '+period; }
 
     function sortRooms(list){ const s=document.getElementById('sortBy').value; if(s==='capacity_desc') return list.sort((a,b)=>(b.capacity||0)-(a.capacity||0)); if(s==='capacity_asc') return list.sort((a,b)=>(a.capacity||0)-(b.capacity||0)); if(s==='building') return list.sort((a,b)=>(a.building||'').localeCompare(b.building||'')); if(s==='available'){ const now=new Date(); const day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]; const t=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}); return list.sort((a,b)=> (isRoomFreeAtTime(b,day,t,t)?1:0) - (isRoomFreeAtTime(a,day,t,t)?1:0)); } return list; }
 
     function renderResults(){ const building=document.getElementById('buildingFilter').value; const minCap=parseInt(document.getElementById('capacityFilter').value)||0; const maxCap=parseInt(document.getElementById('maxCapacityFilter').value)||Infinity; const q=document.getElementById('roomSearch').value.toLowerCase(); const start=document.getElementById('startTime').value; const end=document.getElementById('endTime').value;
-        let filtered=classroomsData.filter(r=>{ if(building && r.building!==building) return false; if(minCap && (!r.capacity || r.capacity<minCap)) return false; if(maxCap!==Infinity && r.capacity && r.capacity>maxCap) return false; if(q && !((r.text||'').toLowerCase().includes(q) || (r.building||'').toLowerCase().includes(q))) return false; if(selectedCharacteristics.size>0){ if(!r.characteristics) return false; for(const c of selectedCharacteristics) if(!r.characteristics.includes(c)) return false; } if(start&&end){ if(selectedDay){ if(!isRoomFreeAtTime(r,selectedDay,start,end)) return false; } else{ const days=['Monday','Tuesday','Wednesday','Thursday','Friday']; if(!days.some(d=>isRoomFreeAtTime(r,d,start,end))) return false; } } return true; });
+        let filtered=classroomsData.filter(r=>{ if(building && r.building!==building) return false; if(minCap && (!r.capacity || r.capacity<minCap)) return false; if(maxCap!==Infinity && r.capacity && r.capacity>maxCap) return false; if(q && !((r.text||'').toLowerCase().includes(q) || (r.building||'').toLowerCase().includes(q))) return false; if(selectedCharacteristics.size>0){ if(!r.characteristics) return false; for(const c of selectedCharacteristics) if(!r.characteristics.includes(c)) return false; } if(start&&end){ if(selectedDay){ if(!isRoomFreeAtTime(r,selectedDay,start,end)) return false; } else{ const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; if(!days.some(d=>isRoomFreeAtTime(r,d,start,end))) return false; } } return true; });
         filtered=sortRooms(filtered);
         document.getElementById('totalRooms').textContent=filtered.length; const now=new Date(), dayName=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()], nowStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}); document.getElementById('availableRooms').textContent=filtered.filter(r=>isRoomFreeAtTime(r,dayName,nowStr,nowStr)).length;
         const wrap=document.getElementById('results'); if(filtered.length===0){ wrap.innerHTML=`<div class="no-results"><h3>No rooms found</h3><p>Adjust filters to see results.</p></div>`; return }
         wrap.innerHTML=filtered.map(r=>{
-            const daysToShow=selectedDay? [selectedDay] : ['Monday','Tuesday','Wednesday','Thursday','Friday'];
             const chars=r.characteristics? r.characteristics.map(c=>`<span class="char-tag">${c}</span>`).join('') : '';
             let imgHtml = '';
             if (r.image_url) {
                 // Image with loading states; fails silently due to CORS restrictions
                 imgHtml = `<div class="room-image"><img src="${r.image_url}" alt="${r.text}" loading="lazy" decoding="async" class="loading" onload="this.classList.remove('loading')" onerror="this.closest('.room-image').parentElement.classList.add('no-image');this.closest('.room-image').style.display='none'"></div>`;
             }
-            const scheduleHtml = daysToShow.map(d=>{
-                const ds=(r.schedule&&r.schedule[d])||[]; const free=getFreeTimes(r,d);
-                return `<div class="day-schedule"><div class="day-name">${d}</div>` + (ds.length===0?`<div class="time-slot">Free all day</div>`: ds.map(s=>`<div class="time-slot"><div class="course-name">${s.course} - ${s.type}</div><div class="time-range">${s.start_time} - ${s.end_time}</div></div>`).join('')) + (free.length?`<div class="free-times" style="margin-top:6px;color:var(--muted);font-size:0.85rem">Free: ${free.join(' • ')}</div>`:'') + `</div>`;
-            }).join('');
+            const scheduleHtml = buildCalendarGrid(r);
 
             return `
                 <div class="room-card ${r.image_url ? '' : 'no-image'}">
