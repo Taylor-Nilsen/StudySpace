@@ -496,7 +496,60 @@
     function getFreeTimes(room,day){ if(!room.schedule||!room.schedule[day]||room.schedule[day].length===0) return ['All day']; const schedule=room.schedule[day].slice().sort((a,b)=>timeToMinutes(a.start_time)-timeToMinutes(b.start_time)); const free=[]; let last=timeToMinutes('08:00 AM'); for(const s of schedule){ const ss=timeToMinutes(s.start_time); if(ss>last) free.push(`${formatTime(last)} - ${s.start_time}`); last=Math.max(last,timeToMinutes(s.end_time)); } if(last<timeToMinutes('10:00 PM')) free.push(`${formatTime(last)} - 10:00 PM`); return free; }
     function formatTime(minutes){ let h=Math.floor(minutes/60), m=minutes%60, period=h>=12?'PM':'AM'; h=h%12; if(h===0)h=12; return (h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' '+period; }
 
-    function sortRooms(list){ const s=document.getElementById('sortBy').value; if(s==='capacity_desc') return list.sort((a,b)=>(b.capacity||0)-(a.capacity||0)); if(s==='capacity_asc') return list.sort((a,b)=>(a.capacity||0)-(b.capacity||0)); if(s==='building') return list.sort((a,b)=>(a.building||'').localeCompare(b.building||'')); if(s==='available'){ const now=new Date(); const day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]; const t=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}); return list.sort((a,b)=> (isRoomFreeAtTime(b,day,t,t)?1:0) - (isRoomFreeAtTime(a,day,t,t)?1:0)); } return list; }
+    function sortRooms(list){ 
+        const s=document.getElementById('sortBy').value;
+        const now=new Date();
+        const currentDay=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
+        const currentTime=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+        
+        const primarySort = (a,b) => {
+            if(s==='capacity_desc') return (b.capacity||0)-(a.capacity||0);
+            if(s==='capacity_asc') return (a.capacity||0)-(b.capacity||0);
+            if(s==='building') return (a.building||'').localeCompare(b.building||'');
+            if(s==='available'){ 
+                return (isRoomFreeAtTime(b,currentDay,currentTime,currentTime)?1:0) - (isRoomFreeAtTime(a,currentDay,currentTime,currentTime)?1:0);
+            }
+            return 0;
+        };
+        
+        const secondarySort = (a,b) => {
+            const avail_a = calculateDayAvailability(a, selectedDay || 'Monday').percentage;
+            const avail_b = calculateDayAvailability(b, selectedDay || 'Monday').percentage;
+            return avail_b - avail_a;
+        };
+        
+        const tertiarySort = (a,b) => {
+            const chars_a = a.characteristics ? a.characteristics.length : 0;
+            const chars_b = b.characteristics ? b.characteristics.length : 0;
+            return chars_b - chars_a;
+        };
+        
+        const quaternarySort = (a,b) => {
+            const img_a = a.image_url ? 1 : 0;
+            const img_b = b.image_url ? 1 : 0;
+            return img_b - img_a;
+        };
+        
+        const quinarySort = (a,b) => {
+            return (a.text||'').localeCompare(b.text||'');
+        };
+        
+        return list.sort((a,b) => {
+            let result = primarySort(a,b);
+            if(result !== 0) return result;
+            
+            result = secondarySort(a,b);
+            if(result !== 0) return result;
+            
+            result = tertiarySort(a,b);
+            if(result !== 0) return result;
+            
+            result = quaternarySort(a,b);
+            if(result !== 0) return result;
+            
+            return quinarySort(a,b);
+        });
+    }
 
     function renderResults(){ const minCap=parseInt(document.getElementById('capacityFilter').value)||0; const maxCap=parseInt(document.getElementById('maxCapacityFilter').value)||Infinity; const q=document.getElementById('roomSearch').value.toLowerCase(); const start=document.getElementById('startTime').value; const end=document.getElementById('endTime').value;
         let filtered=classroomsData.filter(r=>{ if(selectedBuildings.size>0 && !selectedBuildings.has(r.building)) return false; if(minCap && (!r.capacity || r.capacity<minCap)) return false; if(maxCap!==Infinity && r.capacity && r.capacity>maxCap) return false; if(q && !((r.text||'').toLowerCase().includes(q) || (r.building||'').toLowerCase().includes(q))) return false; if(selectedCharacteristics.size>0){ if(!r.characteristics) return false; for(const c of selectedCharacteristics) if(!r.characteristics.includes(c)) return false; } if(start&&end){ if(selectedDay){ if(!isRoomFreeAtTime(r,selectedDay,start,end)) return false; } else{ const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; if(!days.some(d=>isRoomFreeAtTime(r,d,start,end))) return false; } } return true; });
