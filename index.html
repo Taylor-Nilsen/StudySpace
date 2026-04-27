@@ -419,6 +419,25 @@
         }
     }
 
+    function calculateDayAvailability(room, day){
+        const schedule=room.schedule&&room.schedule[day]?room.schedule[day]:[];
+        const occupiedHours=new Set();
+        schedule.forEach(s=>{
+            const startMin=timeToMinutes(s.start_time);
+            const endMin=timeToMinutes(s.end_time);
+            const durationMin=endMin-startMin;
+            const hoursNeeded=Math.ceil(durationMin/60);
+            const startHour=Math.floor(startMin/60);
+            for(let i=0;i<hoursNeeded;i++){
+                const hour=startHour+i;
+                if(hour>=8&&hour<18) occupiedHours.add(hour);
+            }
+        });
+        const totalHours=10; // 8am to 6pm
+        const percentOccupied=Math.round((occupiedHours.size/totalHours)*100);
+        return percentOccupied;
+    }
+
     function buildCalendarGrid(room){
         const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         let html=`<div class="schedule-calendar">`;
@@ -426,7 +445,7 @@
         // Header row
         html+=`<div class="calendar-header-row">`;
         html+=`<div class="calendar-header-time"></div>`;
-        days.forEach(d=>html+=`<div class="calendar-header-day">${d.slice(0,3)}</div>`);
+        days.forEach(d=>{ const pct=calculateDayAvailability(room,d); html+=`<div class="calendar-header-day"><div>${d.slice(0,3)}</div><div style="font-size:0.6rem;color:#94a3b8;margin-top:2px">${pct}%</div></div>`; });
         html+=`</div>`;
         
         // Body: time column + day columns
