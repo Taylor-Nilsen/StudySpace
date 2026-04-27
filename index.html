@@ -446,7 +446,7 @@
         // Header row
         html+=`<div class="calendar-header-row">`;
         html+=`<div class="calendar-header-time"></div>`;
-        days.forEach(d=>{ const pct=calculateDayAvailability(room,d); html+=`<div class="calendar-header-day"><div>${d.slice(0,3)}</div><div style="font-size:0.6rem;color:#94a3b8;margin-top:2px">${pct}%</div></div>`; });
+        days.forEach(d=>{ const pct=calculateDayAvailability(room,d); html+=`<div class="calendar-header-day">${d.slice(0,3)} ${pct}%</div>`; });
         html+=`</div>`;
         
         // Body: time column + day columns
@@ -516,7 +516,7 @@
                 <div class="room-card ${r.image_url ? '' : 'no-image'}">
                     ${imgHtml}
                     <div class="room-body">
-                        <h3 class="room-title">${r.text}</h3>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 class="room-title">${r.text}</h3><span style="font-size:0.8rem;color:#94a3b8">${selectedDay ? calculateDayAvailability(r, selectedDay) + '%' : ''}</span></div>
                         <div class="room-info"><span class="badge">${r.building||''}</span>${r.capacity?`<span class="badge">Cap ${r.capacity}</span>`:''}${r.type?`<span class="badge">${r.type}</span>`:''}</div>
                         <div style="margin-top:8px"><button class="btn btn-details" onclick="toggleDetails(this)">Details ▾</button></div>
                         <div class="details">
