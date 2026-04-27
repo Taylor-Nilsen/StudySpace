@@ -63,7 +63,7 @@
         .checkbox-item{display:flex;align-items:center;gap:6px}
         .controls-actions{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
         /* Center column: slightly larger cards to better occupy center space */
-        .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+        .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:0 20px}
         .room-card{background:#1f2937;border:1px solid #1f2937;padding:12px;border-radius:12px;transition:transform .12s ease,box-shadow .12s ease}
         .room-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.3);border-color:rgba(96,165,250,0.2)}
         /* Use a consistent 4:3 aspect ratio for room images */
@@ -76,7 +76,7 @@
         .room-card.no-image .room-body{display:flex;flex-direction:column;justify-content:center;min-height:180px}
 
         /* Results grid: max 3 columns */
-        .results{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .results{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 20px}
         @media (max-width:1000px){ .results{grid-template-columns:repeat(2,1fr)} }
         @media (max-width:640px){ .results{grid-template-columns:repeat(1,1fr)} }
         /* Button styles */
