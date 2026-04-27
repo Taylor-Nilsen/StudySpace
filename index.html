@@ -156,7 +156,7 @@
                     </div>
                     <div class="filter-group">
                         <label for="sortBy">Sort</label>
-                        <select id="sortBy"><option value="capacity_asc">Capacity ↑</option><option value="capacity_desc">Capacity ↓</option><option value="building">Building</option></select>
+                        <select id="sortBy"><option value="capacity_asc">Low Capacity</option><option value="capacity_desc">High Capacity</option><option value="building">Building</option></select>
                     </div>
                 </div>
 
@@ -498,39 +498,21 @@
 
     function sortRooms(list){ 
         const s=document.getElementById('sortBy').value;
-        const now=new Date();
-        const currentDay=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
-        const currentTime=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
         
         const primarySort = (a,b) => {
             if(s==='capacity_desc') return (b.capacity||0)-(a.capacity||0);
             if(s==='capacity_asc') return (a.capacity||0)-(b.capacity||0);
             if(s==='building') return (a.building||'').localeCompare(b.building||'');
-            if(s==='available'){ 
-                return (isRoomFreeAtTime(b,currentDay,currentTime,currentTime)?1:0) - (isRoomFreeAtTime(a,currentDay,currentTime,currentTime)?1:0);
-            }
             return 0;
         };
         
-        const secondarySort = (a,b) => {
-            const avail_a = calculateDayAvailability(a, selectedDay || 'Monday').percentage;
-            const avail_b = calculateDayAvailability(b, selectedDay || 'Monday').percentage;
-            return avail_b - avail_a;
-        };
-        
-        const tertiarySort = (a,b) => {
-            const chars_a = a.characteristics ? a.characteristics.length : 0;
-            const chars_b = b.characteristics ? b.characteristics.length : 0;
-            return chars_b - chars_a;
-        };
-        
-        const quaternarySort = (a,b) => {
+        const imageSort = (a,b) => {
             const img_a = a.image_url ? 1 : 0;
             const img_b = b.image_url ? 1 : 0;
             return img_b - img_a;
         };
         
-        const quinarySort = (a,b) => {
+        const alphabeticalSort = (a,b) => {
             return (a.text||'').localeCompare(b.text||'');
         };
         
@@ -538,16 +520,10 @@
             let result = primarySort(a,b);
             if(result !== 0) return result;
             
-            result = secondarySort(a,b);
+            result = imageSort(a,b);
             if(result !== 0) return result;
             
-            result = tertiarySort(a,b);
-            if(result !== 0) return result;
-            
-            result = quaternarySort(a,b);
-            if(result !== 0) return result;
-            
-            return quinarySort(a,b);
+            return alphabeticalSort(a,b);
         });
     }
 
@@ -569,7 +545,7 @@
                 <div class="room-card ${r.image_url ? '' : 'no-image'}">
                     ${imgHtml}
                     <div class="room-body">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 class="room-title">${r.text}</h3><span style="font-size:0.8rem;color:#94a3b8">${selectedDay ? calculateDayAvailability(r, selectedDay).percentage + '%' : ''}</span></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 class="room-title">${r.text}</h3><span style="font-size:0.8rem;color:#60a5fa;font-weight:600">${selectedDay ? (calculateDayAvailability(r, selectedDay)?.percentage || 0) + '%' : ''}</span></div>
                         <div class="room-info"><span class="badge">${r.building||''}</span>${r.capacity?`<span class="badge">Cap ${r.capacity}</span>`:''}${r.type?`<span class="badge">${r.type}</span>`:''}</div>
                         <div style="margin-top:8px"><button class="btn btn-details" onclick="toggleDetails(this)">Details ▾</button></div>
                         <div class="details">
